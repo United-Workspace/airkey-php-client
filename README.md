@@ -20,12 +20,12 @@ To install the bindings via [Composer](http://getcomposer.org/), add the followi
 {
   "repositories": [
     {
-      "type": "git",
-      "url": "https://github.com//sleevesup-airkey-api.git"
+      "type": "vcs",
+      "url": "https://gitlab.com/sleevesup/airkey-php-client.git"
     }
   ],
   "require": {
-    "/sleevesup-airkey-api": "*@dev"
+    "sleevesup/evva-airkey-api": "dev-main"
   }
 }
 ```
