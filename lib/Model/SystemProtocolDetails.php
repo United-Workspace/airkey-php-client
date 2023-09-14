@@ -58,7 +58,7 @@ class SystemProtocolDetails implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'fields' => '\Evva\AirKey\Model\JsonNode',
+        'fields' => 'object',
         'translations' => 'map[string,string]'
     ];
 
@@ -214,7 +214,7 @@ class SystemProtocolDetails implements ModelInterface, ArrayAccess
     /**
      * Gets fields
      *
-     * @return \Evva\AirKey\Model\JsonNode
+     * @return mixed
      */
     public function getFields()
     {
@@ -224,7 +224,7 @@ class SystemProtocolDetails implements ModelInterface, ArrayAccess
     /**
      * Sets fields
      *
-     * @param \Evva\AirKey\Model\JsonNode $fields Event details value fields using a JSON structure
+     * @param mixed $fields Event details value fields using a JSON structure
      *
      * @return $this
      */

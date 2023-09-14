@@ -46,27 +46,27 @@ class LockProtocolDetails implements ModelInterface, ArrayAccess
     const DISCRIMINATOR = null;
 
     /**
-      * The original name of the model.
-      *
-      * @var string
-      */
+     * The original name of the model.
+     *
+     * @var string
+     */
     protected static $swaggerModelName = 'LockProtocolDetails';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var string[]
+     */
     protected static $swaggerTypes = [
-        'fields' => '\Evva\AirKey\Model\JsonNode',
+        'fields' => 'object',
         'translations' => 'map[string,string]'
     ];
 
     /**
-      * Array of property to format mappings. Used for (de)serialization
-      *
-      * @var string[]
-      */
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var string[]
+     */
     protected static $swaggerFormats = [
         'fields' => null,
         'translations' => null
@@ -164,9 +164,9 @@ class LockProtocolDetails implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
-    
 
-    
+
+
 
     /**
      * Associative array for storing property values
@@ -214,7 +214,7 @@ class LockProtocolDetails implements ModelInterface, ArrayAccess
     /**
      * Gets fields
      *
-     * @return \Evva\AirKey\Model\JsonNode
+     * @return mixed
      */
     public function getFields()
     {
@@ -224,7 +224,7 @@ class LockProtocolDetails implements ModelInterface, ArrayAccess
     /**
      * Sets fields
      *
-     * @param \Evva\AirKey\Model\JsonNode $fields Event details value fields
+     * @param mixed $fields Event details value fields
      *
      * @return $this
      */
