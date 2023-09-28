@@ -65,7 +65,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
 # **getLocks**
-> \Evva\AirKey\Model\LockPagingList getLocks($offset, $limit, $calendar_id)
+> \Evva\AirKey\Model\LockPagingList getLocks($offset, $limit, $calendar_id, $locking_system_id)
 
 Gets information of all locks.
 
@@ -90,9 +90,10 @@ $apiInstance = new Evva\AirKey\Api\LocksApi(
 $offset = 56; // int | Offset for paging
 $limit = 56; // int | Limit of result size
 $calendar_id = 789; // int | Filter locks by holiday calendar id
+$locking_system_id = 789; // int | Filter locks by technical identifier lockingSystemId
 
 try {
-    $result = $apiInstance->getLocks($offset, $limit, $calendar_id);
+    $result = $apiInstance->getLocks($offset, $limit, $calendar_id, $locking_system_id);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling LocksApi->getLocks: ', $e->getMessage(), PHP_EOL;
@@ -107,6 +108,7 @@ Name | Type | Description  | Notes
  **offset** | **int**| Offset for paging | [optional]
  **limit** | **int**| Limit of result size | [optional]
  **calendar_id** | **int**| Filter locks by holiday calendar id | [optional]
+ **locking_system_id** | **int**| Filter locks by technical identifier lockingSystemId | [optional]
 
 ### Return type
 

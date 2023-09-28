@@ -5,8 +5,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **float** | **bool** |  | [optional] 
 **node_type** | **string** |  | [optional] 
-**binary** | **bool** |  | [optional] 
 **number** | **bool** |  | [optional] 
+**binary** | **bool** |  | [optional] 
 **object** | **bool** |  | [optional] 
 **boolean** | **bool** |  | [optional] 
 **value_node** | **bool** |  | [optional] 

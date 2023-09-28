@@ -1,6 +1,6 @@
 <?php
 /**
- * EventPagingList
+ * SendRegistrationCodeRequest
  *
  * PHP version 5
  *
@@ -33,15 +33,15 @@ use \ArrayAccess;
 use \Evva\AirKey\ObjectSerializer;
 
 /**
- * EventPagingList Class Doc Comment
+ * SendRegistrationCodeRequest Class Doc Comment
  *
  * @category Class
- * @description Model that describes a list of events logged in the access control system used for paging.
+ * @description Model that describes a send registration code request.
  * @package  Evva\AirKey
  * @author   Swagger Codegen team
  * @link     https://github.com/swagger-api/swagger-codegen
  */
-class EventPagingList implements ModelInterface, ArrayAccess
+class SendRegistrationCodeRequest implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class EventPagingList implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'EventPagingList';
+    protected static $swaggerModelName = 'SendRegistrationCodeRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +58,7 @@ class EventPagingList implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'offset' => 'int',
-        'total' => 'int',
-        'events' => '\Evva\AirKey\Model\Event[]'
+        'sms_text' => 'string'
     ];
 
     /**
@@ -69,9 +67,7 @@ class EventPagingList implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'offset' => 'int64',
-        'total' => 'int64',
-        'events' => null
+        'sms_text' => null
     ];
 
     /**
@@ -101,9 +97,7 @@ class EventPagingList implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'offset' => 'offset',
-        'total' => 'total',
-        'events' => 'events'
+        'sms_text' => 'smsText'
     ];
 
     /**
@@ -112,9 +106,7 @@ class EventPagingList implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'offset' => 'setOffset',
-        'total' => 'setTotal',
-        'events' => 'setEvents'
+        'sms_text' => 'setSmsText'
     ];
 
     /**
@@ -123,9 +115,7 @@ class EventPagingList implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'offset' => 'getOffset',
-        'total' => 'getTotal',
-        'events' => 'getEvents'
+        'sms_text' => 'getSmsText'
     ];
 
     /**
@@ -188,9 +178,7 @@ class EventPagingList implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['offset'] = isset($data['offset']) ? $data['offset'] : null;
-        $this->container['total'] = isset($data['total']) ? $data['total'] : null;
-        $this->container['events'] = isset($data['events']) ? $data['events'] : null;
+        $this->container['sms_text'] = isset($data['sms_text']) ? $data['sms_text'] : null;
     }
 
     /**
@@ -201,6 +189,14 @@ class EventPagingList implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        if (!is_null($this->container['sms_text']) && (mb_strlen($this->container['sms_text']) > 150)) {
+            $invalidProperties[] = "invalid value for 'sms_text', the character length must be smaller than or equal to 150.";
+        }
+
+        if (!is_null($this->container['sms_text']) && (mb_strlen($this->container['sms_text']) < 0)) {
+            $invalidProperties[] = "invalid value for 'sms_text', the character length must be bigger than or equal to 0.";
+        }
 
         return $invalidProperties;
     }
@@ -218,73 +214,32 @@ class EventPagingList implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets offset
+     * Gets sms_text
      *
-     * @return int
+     * @return string
      */
-    public function getOffset()
+    public function getSmsText()
     {
-        return $this->container['offset'];
+        return $this->container['sms_text'];
     }
 
     /**
-     * Sets offset
+     * Sets sms_text
      *
-     * @param int $offset Offset for paging
+     * @param string $sms_text SMS text. Default text will be used if not set.
      *
      * @return $this
      */
-    public function setOffset($offset)
+    public function setSmsText($sms_text)
     {
-        $this->container['offset'] = $offset;
+        if (!is_null($sms_text) && (mb_strlen($sms_text) > 150)) {
+            throw new \InvalidArgumentException('invalid length for $sms_text when calling SendRegistrationCodeRequest., must be smaller than or equal to 150.');
+        }
+        if (!is_null($sms_text) && (mb_strlen($sms_text) < 0)) {
+            throw new \InvalidArgumentException('invalid length for $sms_text when calling SendRegistrationCodeRequest., must be bigger than or equal to 0.');
+        }
 
-        return $this;
-    }
-
-    /**
-     * Gets total
-     *
-     * @return int
-     */
-    public function getTotal()
-    {
-        return $this->container['total'];
-    }
-
-    /**
-     * Sets total
-     *
-     * @param int $total Total size of result set
-     *
-     * @return $this
-     */
-    public function setTotal($total)
-    {
-        $this->container['total'] = $total;
-
-        return $this;
-    }
-
-    /**
-     * Gets events
-     *
-     * @return \Evva\AirKey\Model\Event[]
-     */
-    public function getEvents()
-    {
-        return $this->container['events'];
-    }
-
-    /**
-     * Sets events
-     *
-     * @param \Evva\AirKey\Model\Event[] $events List of events
-     *
-     * @return $this
-     */
-    public function setEvents($events)
-    {
-        $this->container['events'] = $events;
+        $this->container['sms_text'] = $sms_text;
 
         return $this;
     }

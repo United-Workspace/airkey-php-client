@@ -19,7 +19,8 @@ Method | HTTP request | Description
 [**getPhones**](MediaApi.md#getPhones) | **GET** /v1/media/phones | Gets information of all phones.
 [**reactivateMedium**](MediaApi.md#reactivateMedium) | **POST** /v1/media/{mediumId}/reactivate | Reactivates provided medium.
 [**resetPinOfPhone**](MediaApi.md#resetPinOfPhone) | **POST** /v1/media/phones/{phoneId}/pin-reset | Resets PIN of the phone.
-[**sendRegistrationCodeToPhone**](MediaApi.md#sendRegistrationCodeToPhone) | **POST** /v1/media/phones/{phoneId}/send-registration-code | Sends pairing code to phone.
+[**sendRegistrationCodeToPhone**](MediaApi.md#sendRegistrationCodeToPhone) | **POST** /v1/media/phones/{phoneId}/send-registration-code-with-parameters | Sends pairing code to phone while the SMS text to be sent can be configured.
+[**sendRegistrationCodeToPhone1**](MediaApi.md#sendRegistrationCodeToPhone1) | **POST** /v1/media/phones/{phoneId}/send-registration-code | Sends pairing code to phone.
 [**updateCards**](MediaApi.md#updateCards) | **PUT** /v1/media/cards | Updates list of cards.
 [**updatePhones**](MediaApi.md#updatePhones) | **PUT** /v1/media/phones | Updates list of phones.
 
@@ -213,8 +214,8 @@ $apiInstance = new Evva\AirKey\Api\MediaApi(
     $config
 );
 $medium_id = 789; // int | Unique identifier of the medium to be deactivated
-$reason = "reason_example"; // string | Reason of deactivation
-$comment = "comment_example"; // string | Additional comment of deactivation
+$reason = "reason_example"; // string | Reason of deactivation (user defined input that can be used to describe the reasons for deactivating a medium, e.g. has been lost / was stolen / is broken)
+$comment = "comment_example"; // string | Additional comment of deactivation (user defined input that can be used to add further details regarding the reason for deactivating a medium, e.g. when all details won't fit within the reason field)
 
 try {
     $result = $apiInstance->deactivateMedium($medium_id, $reason, $comment);
@@ -230,8 +231,8 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **medium_id** | **int**| Unique identifier of the medium to be deactivated |
- **reason** | **string**| Reason of deactivation |
- **comment** | **string**| Additional comment of deactivation | [optional]
+ **reason** | **string**| Reason of deactivation (user defined input that can be used to describe the reasons for deactivating a medium, e.g. has been lost / was stolen / is broken) |
+ **comment** | **string**| Additional comment of deactivation (user defined input that can be used to add further details regarding the reason for deactivating a medium, e.g. when all details won&#39;t fit within the reason field) | [optional]
 
 ### Return type
 
@@ -469,7 +470,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
 # **getCards**
-> \Evva\AirKey\Model\CardPagingList getCards($person_id, $assignment_status, $offset, $limit)
+> \Evva\AirKey\Model\CardPagingList getCards($person_id, $locking_system_id, $assignment_status, $offset, $limit)
 
 Gets information of all cards.
 
@@ -492,12 +493,13 @@ $apiInstance = new Evva\AirKey\Api\MediaApi(
     $config
 );
 $person_id = 789; // int | Filter cards by person id
+$locking_system_id = 789; // int | Filter cards by technical identifier lockingSystemId
 $assignment_status = "assignment_status_example"; // string | Filter cards by assignment status
 $offset = 56; // int | Offset for paging
 $limit = 56; // int | Limit of result size
 
 try {
-    $result = $apiInstance->getCards($person_id, $assignment_status, $offset, $limit);
+    $result = $apiInstance->getCards($person_id, $locking_system_id, $assignment_status, $offset, $limit);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling MediaApi->getCards: ', $e->getMessage(), PHP_EOL;
@@ -510,6 +512,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **person_id** | **int**| Filter cards by person id | [optional]
+ **locking_system_id** | **int**| Filter cards by technical identifier lockingSystemId | [optional]
  **assignment_status** | **string**| Filter cards by assignment status | [optional]
  **offset** | **int**| Offset for paging | [optional]
  **limit** | **int**| Limit of result size | [optional]
@@ -530,7 +533,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
 # **getMedia**
-> \Evva\AirKey\Model\MediumPagingList getMedia($person_id, $assignment_status, $offset, $limit)
+> \Evva\AirKey\Model\MediumPagingList getMedia($person_id, $locking_system_id, $assignment_status, $offset, $limit)
 
 Gets information of all media.
 
@@ -553,12 +556,13 @@ $apiInstance = new Evva\AirKey\Api\MediaApi(
     $config
 );
 $person_id = 789; // int | Filter media by person id
+$locking_system_id = 789; // int | Filter media by technical identifier lockingSystemId
 $assignment_status = "assignment_status_example"; // string | Filter media by assignment status
 $offset = 56; // int | Offset for paging
 $limit = 56; // int | Limit of result size
 
 try {
-    $result = $apiInstance->getMedia($person_id, $assignment_status, $offset, $limit);
+    $result = $apiInstance->getMedia($person_id, $locking_system_id, $assignment_status, $offset, $limit);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling MediaApi->getMedia: ', $e->getMessage(), PHP_EOL;
@@ -571,6 +575,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **person_id** | **int**| Filter media by person id | [optional]
+ **locking_system_id** | **int**| Filter media by technical identifier lockingSystemId | [optional]
  **assignment_status** | **string**| Filter media by assignment status | [optional]
  **offset** | **int**| Offset for paging | [optional]
  **limit** | **int**| Limit of result size | [optional]
@@ -701,7 +706,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
 # **getPhones**
-> \Evva\AirKey\Model\PhonePagingList getPhones($person_id, $assignment_status, $phone_number, $offset, $limit)
+> \Evva\AirKey\Model\PhonePagingList getPhones($person_id, $locking_system_id, $assignment_status, $phone_number, $offset, $limit)
 
 Gets information of all phones.
 
@@ -724,13 +729,14 @@ $apiInstance = new Evva\AirKey\Api\MediaApi(
     $config
 );
 $person_id = 789; // int | Filter phones by person id
+$locking_system_id = 789; // int | Filter phones by technical identifier lockingSystemId
 $assignment_status = "assignment_status_example"; // string | Filter phones by assignment status
 $phone_number = "phone_number_example"; // string | Filter phones by phone number
 $offset = 56; // int | Offset for paging
 $limit = 56; // int | Limit of result size
 
 try {
-    $result = $apiInstance->getPhones($person_id, $assignment_status, $phone_number, $offset, $limit);
+    $result = $apiInstance->getPhones($person_id, $locking_system_id, $assignment_status, $phone_number, $offset, $limit);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling MediaApi->getPhones: ', $e->getMessage(), PHP_EOL;
@@ -743,6 +749,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **person_id** | **int**| Filter phones by person id | [optional]
+ **locking_system_id** | **int**| Filter phones by technical identifier lockingSystemId | [optional]
  **assignment_status** | **string**| Filter phones by assignment status | [optional]
  **phone_number** | **string**| Filter phones by phone number | [optional]
  **offset** | **int**| Offset for paging | [optional]
@@ -787,9 +794,9 @@ $apiInstance = new Evva\AirKey\Api\MediaApi(
     $config
 );
 $medium_id = 789; // int | Unique identifier of the medium to be reactivated
-$reason = "reason_example"; // string | Reason of reactivation
+$reason = "reason_example"; // string | Reason of reactivation (user defined input that can be used to describe the reasons for reactivating a medium, e.g. a medium has been found again)
 $recover_authorizations = true; // bool | Recover authorizations available prior to deactivation
-$comment = "comment_example"; // string | Additional comment of reactivation
+$comment = "comment_example"; // string | Additional comment of reactivation (user defined input that can be used to add further details regarding the reason for reactivating a medium, e.g. when all details won't fit within the reason field)
 
 try {
     $result = $apiInstance->reactivateMedium($medium_id, $reason, $recover_authorizations, $comment);
@@ -805,9 +812,9 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **medium_id** | **int**| Unique identifier of the medium to be reactivated |
- **reason** | **string**| Reason of reactivation |
+ **reason** | **string**| Reason of reactivation (user defined input that can be used to describe the reasons for reactivating a medium, e.g. a medium has been found again) |
  **recover_authorizations** | **bool**| Recover authorizations available prior to deactivation |
- **comment** | **string**| Additional comment of reactivation | [optional]
+ **comment** | **string**| Additional comment of reactivation (user defined input that can be used to add further details regarding the reason for reactivating a medium, e.g. when all details won&#39;t fit within the reason field) | [optional]
 
 ### Return type
 
@@ -880,7 +887,64 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
 # **sendRegistrationCodeToPhone**
-> \Evva\AirKey\Model\Phone sendRegistrationCodeToPhone($phone_id)
+> \Evva\AirKey\Model\Phone sendRegistrationCodeToPhone($phone_id, $body)
+
+Sends pairing code to phone while the SMS text to be sent can be configured.
+
+Sends a generated pairing code per SMS to the phone and returns a new version of the phone object.
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: X-API-Key
+$config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+$apiInstance = new Evva\AirKey\Api\MediaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$phone_id = 789; // int | Unique identifier of the phone
+$body = new \Evva\AirKey\Model\SendRegistrationCodeRequest(); // \Evva\AirKey\Model\SendRegistrationCodeRequest | Send registration code request wrapper
+
+try {
+    $result = $apiInstance->sendRegistrationCodeToPhone($phone_id, $body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling MediaApi->sendRegistrationCodeToPhone: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **phone_id** | **int**| Unique identifier of the phone |
+ **body** | [**\Evva\AirKey\Model\SendRegistrationCodeRequest**](../Model/SendRegistrationCodeRequest.md)| Send registration code request wrapper | [optional]
+
+### Return type
+
+[**\Evva\AirKey\Model\Phone**](../Model/Phone.md)
+
+### Authorization
+
+[X-API-Key](../../README.md#X-API-Key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+# **sendRegistrationCodeToPhone1**
+> \Evva\AirKey\Model\Phone sendRegistrationCodeToPhone1($phone_id)
 
 Sends pairing code to phone.
 
@@ -905,10 +969,10 @@ $apiInstance = new Evva\AirKey\Api\MediaApi(
 $phone_id = 789; // int | Unique identifier of the phone
 
 try {
-    $result = $apiInstance->sendRegistrationCodeToPhone($phone_id);
+    $result = $apiInstance->sendRegistrationCodeToPhone1($phone_id);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling MediaApi->sendRegistrationCodeToPhone: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling MediaApi->sendRegistrationCodeToPhone1: ', $e->getMessage(), PHP_EOL;
 }
 ?>
 ```

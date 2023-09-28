@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **lock_type** | **string** | Type of lock | [optional] 
 **lock_technology** | **string** | Type of lock technology | [optional] 
 **lock_identifier** | **string** | Identifier of the lock | [optional] 
+**locking_system_id** | **int** | Technical identifier of the lock | [optional] 
 **lock_door** | [**\Evva\AirKey\Model\LockDoor**](LockDoor.md) | Door information associated with the lock | 
 **lock_firmware** | [**\Evva\AirKey\Model\LockFirmware**](LockFirmware.md) | Current firmware of the lock | [optional] 
 **comment** | **string** | Comment | [optional] 

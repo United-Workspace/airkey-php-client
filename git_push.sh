@@ -14,7 +14,7 @@ if [ "$git_user_id" = "" ]; then
 fi
 
 if [ "$git_repo_id" = "" ]; then
-    git_repo_id=""
+    git_repo_id="sleevesup/evva-airkey-api"
     echo "[INFO] No command line input provided. Set \$git_repo_id to $git_repo_id"
 fi
 
@@ -24,7 +24,7 @@ if [ "$release_note" = "" ]; then
 fi
 
 if [ "$git_repo_base_url" = "" ]; then
-    git_repo_base_url="https://github.com"
+    git_repo_base_url="https://gitlab.com/sleevesup/airkey-php-client"
     echo "[INFO] No command line input provided. Set \$git_repo_base_url to $git_repo_base_url"
 fi
 
