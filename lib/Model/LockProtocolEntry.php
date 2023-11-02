@@ -204,6 +204,7 @@ class LockProtocolEntry implements ModelInterface, ArrayAccess
     const EVENT_CATEGORY_PERMANENT_OPENING_MODE_EVENT = 'PERMANENT_OPENING_MODE_EVENT';
     const EVENT_CATEGORY_SYNC_EVENT = 'SYNC_EVENT';
     const EVENT_CATEGORY_SYNC_BY_SUPPORT_EVENT = 'SYNC_BY_SUPPORT_EVENT';
+    const EVENT_CATEGORY_SYNC_AFTER_UNLOCK_EVENT = 'SYNC_AFTER_UNLOCK_EVENT';
     const EVENT_CATEGORY_DUMMY_EVENT = 'DUMMY_EVENT';
     
 
@@ -221,6 +222,7 @@ class LockProtocolEntry implements ModelInterface, ArrayAccess
             self::EVENT_CATEGORY_PERMANENT_OPENING_MODE_EVENT,
             self::EVENT_CATEGORY_SYNC_EVENT,
             self::EVENT_CATEGORY_SYNC_BY_SUPPORT_EVENT,
+            self::EVENT_CATEGORY_SYNC_AFTER_UNLOCK_EVENT,
             self::EVENT_CATEGORY_DUMMY_EVENT,
         ];
     }
