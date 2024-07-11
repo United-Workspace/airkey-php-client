@@ -4,6 +4,7 @@ All URIs are relative to *https://integration.api.airkey.evva.com:443/cloud*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**approvePendingPhoneReplacement**](MediaApi.md#approvePendingPhoneReplacement) | **POST** /v1/pending-phone-replacements/{replacementId}/approve | Approves pending phone replacement
 [**assignOwnerToMedium**](MediaApi.md#assignOwnerToMedium) | **POST** /v1/media/assign | Assigns a person to a medium for each provided assignment.
 [**cancelMediumAssignments**](MediaApi.md#cancelMediumAssignments) | **POST** /v1/media/cancel-assignment | Cancels assignments of media.
 [**createPhones**](MediaApi.md#createPhones) | **POST** /v1/media/phones | Adds list of new phones.
@@ -15,15 +16,73 @@ Method | HTTP request | Description
 [**getCards**](MediaApi.md#getCards) | **GET** /v1/media/cards | Gets information of all cards.
 [**getMedia**](MediaApi.md#getMedia) | **GET** /v1/media | Gets information of all media.
 [**getMedium**](MediaApi.md#getMedium) | **GET** /v1/media/{mediumId} | Gets information of a specific medium.
+[**getPendingPhoneReplacements**](MediaApi.md#getPendingPhoneReplacements) | **GET** /v1/pending-phone-replacements | Gets all pending phone replacements.
 [**getPhone**](MediaApi.md#getPhone) | **GET** /v1/media/phones/{phoneId} | Gets information of specific phone.
 [**getPhones**](MediaApi.md#getPhones) | **GET** /v1/media/phones | Gets information of all phones.
 [**reactivateMedium**](MediaApi.md#reactivateMedium) | **POST** /v1/media/{mediumId}/reactivate | Reactivates provided medium.
+[**rejectPendingPhoneReplacement**](MediaApi.md#rejectPendingPhoneReplacement) | **POST** /v1/pending-phone-replacements/{replacementId}/reject | Rejects pending phone replacement
 [**resetPinOfPhone**](MediaApi.md#resetPinOfPhone) | **POST** /v1/media/phones/{phoneId}/pin-reset | Resets PIN of the phone.
-[**sendRegistrationCodeToPhone**](MediaApi.md#sendRegistrationCodeToPhone) | **POST** /v1/media/phones/{phoneId}/send-registration-code-with-parameters | Sends pairing code to phone while the SMS text to be sent can be configured.
-[**sendRegistrationCodeToPhone1**](MediaApi.md#sendRegistrationCodeToPhone1) | **POST** /v1/media/phones/{phoneId}/send-registration-code | Sends pairing code to phone.
+[**sendRegistrationCodeToPhone**](MediaApi.md#sendRegistrationCodeToPhone) | **POST** /v1/media/phones/{phoneId}/send-registration-code-with-parameters | Deprecated/Legacy: This resource will be removed in future versions. Please use resource \&quot;/v1/media/phones/{phoneId}/send-registration-code/sms\&quot; instead.
+[**sendRegistrationCodeToPhone1**](MediaApi.md#sendRegistrationCodeToPhone1) | **POST** /v1/media/phones/{phoneId}/send-registration-code | Deprecated/Legacy: This resource will be removed in future versions. Please use resource \&quot;/v1/media/phones/{phoneId}/send-registration-code/sms\&quot; instead.
+[**sendRegistrationCodeToPhoneViaMail**](MediaApi.md#sendRegistrationCodeToPhoneViaMail) | **POST** /v1/media/phones/{phoneId}/send-registration-code/mail | Sends a pairing code while the email subject and text to be sent can be configured.
+[**sendRegistrationCodeToPhoneViaSms**](MediaApi.md#sendRegistrationCodeToPhoneViaSms) | **POST** /v1/media/phones/{phoneId}/send-registration-code/sms | Sends pairing code to phone while the SMS text to be sent can be configured.
 [**updateCards**](MediaApi.md#updateCards) | **PUT** /v1/media/cards | Updates list of cards.
 [**updatePhones**](MediaApi.md#updatePhones) | **PUT** /v1/media/phones | Updates list of phones.
 
+
+# **approvePendingPhoneReplacement**
+> approvePendingPhoneReplacement($replacement_id)
+
+Approves pending phone replacement
+
+
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: X-API-Key
+$config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+$apiInstance = new Evva\AirKey\Api\MediaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$replacement_id = 789; // int | Unique identifier of the replacement operation
+
+try {
+    $apiInstance->approvePendingPhoneReplacement($replacement_id);
+} catch (Exception $e) {
+    echo 'Exception when calling MediaApi->approvePendingPhoneReplacement: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **replacement_id** | **int**| Unique identifier of the replacement operation |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[X-API-Key](../../README.md#X-API-Key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
 # **assignOwnerToMedium**
 > \Evva\AirKey\Model\MediumAssignment[] assignOwnerToMedium($body)
@@ -650,6 +709,57 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
+# **getPendingPhoneReplacements**
+> \Evva\AirKey\Model\PendingPhoneReplacementListDto getPendingPhoneReplacements()
+
+Gets all pending phone replacements.
+
+Returns a list of all pending phone replacements sorted by creation date ascending.
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: X-API-Key
+$config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+$apiInstance = new Evva\AirKey\Api\MediaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+
+try {
+    $result = $apiInstance->getPendingPhoneReplacements();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling MediaApi->getPendingPhoneReplacements: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**\Evva\AirKey\Model\PendingPhoneReplacementListDto**](../Model/PendingPhoneReplacementListDto.md)
+
+### Authorization
+
+[X-API-Key](../../README.md#X-API-Key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
 # **getPhone**
 > \Evva\AirKey\Model\Phone getPhone($phone_id)
 
@@ -831,6 +941,60 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
+# **rejectPendingPhoneReplacement**
+> rejectPendingPhoneReplacement($replacement_id)
+
+Rejects pending phone replacement
+
+
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: X-API-Key
+$config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+$apiInstance = new Evva\AirKey\Api\MediaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$replacement_id = 789; // int | Unique identifier of the replacement operation
+
+try {
+    $apiInstance->rejectPendingPhoneReplacement($replacement_id);
+} catch (Exception $e) {
+    echo 'Exception when calling MediaApi->rejectPendingPhoneReplacement: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **replacement_id** | **int**| Unique identifier of the replacement operation |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[X-API-Key](../../README.md#X-API-Key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
 # **resetPinOfPhone**
 > \Evva\AirKey\Model\Phone resetPinOfPhone($phone_id)
 
@@ -889,7 +1053,7 @@ Name | Type | Description  | Notes
 # **sendRegistrationCodeToPhone**
 > \Evva\AirKey\Model\Phone sendRegistrationCodeToPhone($phone_id, $body)
 
-Sends pairing code to phone while the SMS text to be sent can be configured.
+Deprecated/Legacy: This resource will be removed in future versions. Please use resource \"/v1/media/phones/{phoneId}/send-registration-code/sms\" instead.
 
 Sends a generated pairing code per SMS to the phone and returns a new version of the phone object.
 
@@ -910,7 +1074,7 @@ $apiInstance = new Evva\AirKey\Api\MediaApi(
     $config
 );
 $phone_id = 789; // int | Unique identifier of the phone
-$body = new \Evva\AirKey\Model\SendRegistrationCodeRequest(); // \Evva\AirKey\Model\SendRegistrationCodeRequest | Send registration code request wrapper
+$body = new \Evva\AirKey\Model\SendRegistrationCodeSmsRequest(); // \Evva\AirKey\Model\SendRegistrationCodeSmsRequest | Send registration code request wrapper
 
 try {
     $result = $apiInstance->sendRegistrationCodeToPhone($phone_id, $body);
@@ -926,7 +1090,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **phone_id** | **int**| Unique identifier of the phone |
- **body** | [**\Evva\AirKey\Model\SendRegistrationCodeRequest**](../Model/SendRegistrationCodeRequest.md)| Send registration code request wrapper | [optional]
+ **body** | [**\Evva\AirKey\Model\SendRegistrationCodeSmsRequest**](../Model/SendRegistrationCodeSmsRequest.md)| Send registration code request wrapper | [optional]
 
 ### Return type
 
@@ -946,7 +1110,7 @@ Name | Type | Description  | Notes
 # **sendRegistrationCodeToPhone1**
 > \Evva\AirKey\Model\Phone sendRegistrationCodeToPhone1($phone_id)
 
-Sends pairing code to phone.
+Deprecated/Legacy: This resource will be removed in future versions. Please use resource \"/v1/media/phones/{phoneId}/send-registration-code/sms\" instead.
 
 Sends a generated pairing code per SMS to the phone and returns a new version of the phone object.
 
@@ -982,6 +1146,120 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **phone_id** | **int**| Unique identifier of the phone |
+
+### Return type
+
+[**\Evva\AirKey\Model\Phone**](../Model/Phone.md)
+
+### Authorization
+
+[X-API-Key](../../README.md#X-API-Key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+# **sendRegistrationCodeToPhoneViaMail**
+> \Evva\AirKey\Model\Phone sendRegistrationCodeToPhoneViaMail($phone_id, $body)
+
+Sends a pairing code while the email subject and text to be sent can be configured.
+
+Sends a generated pairing code per email and returns a new version of the phone object.
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: X-API-Key
+$config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+$apiInstance = new Evva\AirKey\Api\MediaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$phone_id = 789; // int | Unique identifier of the phone
+$body = new \Evva\AirKey\Model\SendRegistrationCodeMailRequest(); // \Evva\AirKey\Model\SendRegistrationCodeMailRequest | Send registration code via email request wrapper
+
+try {
+    $result = $apiInstance->sendRegistrationCodeToPhoneViaMail($phone_id, $body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling MediaApi->sendRegistrationCodeToPhoneViaMail: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **phone_id** | **int**| Unique identifier of the phone |
+ **body** | [**\Evva\AirKey\Model\SendRegistrationCodeMailRequest**](../Model/SendRegistrationCodeMailRequest.md)| Send registration code via email request wrapper |
+
+### Return type
+
+[**\Evva\AirKey\Model\Phone**](../Model/Phone.md)
+
+### Authorization
+
+[X-API-Key](../../README.md#X-API-Key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+# **sendRegistrationCodeToPhoneViaSms**
+> \Evva\AirKey\Model\Phone sendRegistrationCodeToPhoneViaSms($phone_id, $body)
+
+Sends pairing code to phone while the SMS text to be sent can be configured.
+
+Sends a generated pairing code per SMS to the phone and returns a new version of the phone object.
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: X-API-Key
+$config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+$apiInstance = new Evva\AirKey\Api\MediaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$phone_id = 789; // int | Unique identifier of the phone
+$body = new \Evva\AirKey\Model\SendRegistrationCodeSmsRequest(); // \Evva\AirKey\Model\SendRegistrationCodeSmsRequest | Send registration code request wrapper
+
+try {
+    $result = $apiInstance->sendRegistrationCodeToPhoneViaSms($phone_id, $body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling MediaApi->sendRegistrationCodeToPhoneViaSms: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **phone_id** | **int**| Unique identifier of the phone |
+ **body** | [**\Evva\AirKey\Model\SendRegistrationCodeSmsRequest**](../Model/SendRegistrationCodeSmsRequest.md)| Send registration code request wrapper |
 
 ### Return type
 

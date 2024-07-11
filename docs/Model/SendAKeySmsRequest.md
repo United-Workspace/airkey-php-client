@@ -1,4 +1,4 @@
-# SendAKeyRequest
+# SendAKeySmsRequest
 
 ## Properties
 Name | Type | Description | Notes
