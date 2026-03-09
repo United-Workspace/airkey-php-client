@@ -1,0 +1,48 @@
+name: Generate AirKey Client
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y jq unzip
+      
+      - name: Generate Client
+        run: |
+          CLIENT_LANGUAGE=$(jq -r '.clientLanguage' .generator/swagger-config.json)
+          RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" \
+            -d "$(jq '.apiPayload' .generator/swagger-config.json)" \
+            "https://generator.swagger.io/api/gen/clients/${CLIENT_LANGUAGE}")
+          DOWNLOAD_URL=$(echo $RESPONSE | jq -r '.link')
+          curl -s -o generated-client.zip "$DOWNLOAD_URL"
+          unzip -q -o generated-client.zip -d .
+          mkdir -p lib docs test
+          cp -R php-client/lib/. lib/ || true
+          cp -R php-client/docs/. docs/ || true
+          cp -R php-client/test/. test/ || true
+          rm -rf php-client generated-client.zip
+          
+      - name: Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SWAGGER_VERSION=$(jq -r '.info.version' .generator/swagger.json | tr -d '[:space:]')
+          BRANCH_NAME="update-client-${SWAGGER_VERSION}-${{ github.run_id }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b $BRANCH_NAME
+          git add .
+          git commit -m "feat: Auto-update AirKey API client to $SWAGGER_VERSION"
+          git push origin $BRANCH_NAME
+          gh pr create --title "feat: Update AirKey API Client to $SWAGGER_VERSION" --body "Automated update from Swagger specification." --base main --head $BRANCH_NAME
