@@ -1,0 +1,12 @@
+{
+    "clientLanguage": "php",
+    "gitUser": "United Workspace Rover",
+    "gitEmail": "system@united-workspace.de",
+    "apiPayload": {
+        "options": {
+            "invokerPackage": "Evva\\AirKey",
+            "packagePath": ""
+        },
+        "swaggerUrl": "https://integration.api.airkey.evva.com/docs/swagger.json"
+    }
+}

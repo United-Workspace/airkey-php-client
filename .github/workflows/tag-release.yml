@@ -1,0 +1,39 @@
+name: Tag Release
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Create Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SWAGGER_URL=$(jq -r '.apiPayload.swaggerUrl' .generator/swagger-config.json)
+          curl -s "$SWAGGER_URL" -o .generator/swagger.json
+          SWAGGER_VERSION=$(jq -r '.info.version' .generator/swagger.json | tr -d '[:space:]')
+          echo "Version from spec: $SWAGGER_VERSION"
+          if [ -z "$SWAGGER_VERSION" ] || [ "$SWAGGER_VERSION" == "null" ]; then
+            echo "No version found in .generator/swagger.json"
+            exit 1
+          fi
+          
+          if git rev-parse "$SWAGGER_VERSION" >/dev/null 2>&1; then
+            echo "Tag $SWAGGER_VERSION already exists. Skipping."
+          else
+            echo "Creating tag $SWAGGER_VERSION"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag "$SWAGGER_VERSION"
+            git push origin "$SWAGGER_VERSION"
+          fi

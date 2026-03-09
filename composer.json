@@ -1,6 +1,6 @@
 {
     "name": "sleevesup/evva-airkey-api",
-    "description": "",
+    "description": "PHP SDK for the EVVA AirKey Cloud API (Generated)",
     "keywords": [
         "airkey",
         "evva",
@@ -8,20 +8,16 @@
         "sdk",
         "api"
     ],
-    "homepage": "https://gitlab.com/sleevesup/airkey-php-client",
+    "homepage": "https://github.com/United-Workspace/airkey-php-client",
     "license": "proprietary",
     "authors": [
         {
-            "name": "Sebastian Fuss",
+            "name": "United Workspace GmbH",
             "email": "sf@sleevesup.de"
         },
         {
             "name": "EVVA AirKey Team",
             "homepage": "https://integration.api.airkey.evva.com/"
-        },
-        {
-            "name": "Swagger and contributors",
-            "homepage": "https://github.com/swagger-api/swagger-codegen"
         }
     ],
     "require": {
@@ -37,9 +33,13 @@
         "friendsofphp/php-cs-fixer": "~2.12"
     },
     "autoload": {
-        "psr-4": { "Evva\\AirKey\\" : "lib/" }
+        "psr-4": {
+            "Evva\\AirKey\\": "lib/"
+        }
     },
     "autoload-dev": {
-        "psr-4": { "Evva\\AirKey\\" : "test/" }
+        "psr-4": {
+            "Evva\\AirKey\\": "test/"
+        }
     }
 }
