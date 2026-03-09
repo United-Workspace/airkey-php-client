@@ -298,9 +298,12 @@ class ObjectSerializer
             // If a discriminator is defined and points to a valid subclass, use it.
             $discriminator = $class::DISCRIMINATOR;
             if (!empty($discriminator) && isset($data->{$discriminator}) && is_string($data->{$discriminator})) {
-                $subclass = '\Evva\AirKey\Model\\' . $data->{$discriminator};
+                $subclasses = ['\Evva\AirKey\Model\\' . $data->{$discriminator}, '\Evva\AirKey\Model\\' . str_replace('_', '', ucwords(strtolower($data->{$discriminator}), '_')) . substr($class, strrpos($class, '\\') + 1)];
+                foreach ($subclasses as $subclass) {
                 if (is_subclass_of($subclass, $class)) {
                     $class = $subclass;
+                        break;
+                    }
                 }
             }
             $instance = new $class();

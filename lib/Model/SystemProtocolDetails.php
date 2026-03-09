@@ -214,7 +214,7 @@ class SystemProtocolDetails implements ModelInterface, ArrayAccess
     /**
      * Gets fields
      *
-     * @return object
+     * @return mixed
      */
     public function getFields()
     {
@@ -224,7 +224,7 @@ class SystemProtocolDetails implements ModelInterface, ArrayAccess
     /**
      * Sets fields
      *
-     * @param object $fields Event details value fields using a JSON structure
+     * @param mixed $fields Event details value fields using a JSON structure
      *
      * @return $this
      */
