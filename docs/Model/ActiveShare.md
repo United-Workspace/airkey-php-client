@@ -1,13 +1,12 @@
 # ActiveShare
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**access_control_system_name** | **string** | Name of the access control system | [optional] 
-**customer_number** | **string** | Customer number associated with the access control system | [optional] 
-**activated_at** | **string** | Timestamp when the lock was shared (ISO 8601-format compliant date with time in UTC, milliseconds precision) | [optional] 
-**status** | **string** | Share status | [optional] 
+**accessControlSystemName** | **string** | Name of the access control system | [optional] [readonly]
+**customerNumber** | **string** | Customer number associated with the access control system | [optional] [readonly]
+**activatedAt** | **string** | Timestamp when the lock was shared (ISO 8601-format compliant date with time in UTC, milliseconds precision) | [optional] [readonly]
+**status** | **string** | Share status | [optional] [readonly]
 
-[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

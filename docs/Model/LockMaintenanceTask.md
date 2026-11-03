@@ -1,11 +1,10 @@
 # LockMaintenanceTask
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**lock** | [**\Evva\AirKey\Model\SimpleLock**](SimpleLock.md) | Locking component with which the list of maintenance tasks is associated | [optional] 
-**maintenance_task_list** | **string[]** | List of different available maintenance tasks | [optional] 
+**lock** | [**\Evva\AirKey\Model\SimpleLock**](SimpleLock.md) |  | [optional]
+**maintenanceTaskList** | **string[]** | List of different available maintenance tasks | [optional] [readonly]
 
-[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

@@ -1,14 +1,13 @@
 # SystemProtocolPagingList
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**from** | **string** | Timestamp from when the protocol is requested | [optional] 
-**to** | **string** | Timestamp until when the protocol is requested | [optional] 
-**offset** | **int** | Offset for paging | [optional] 
-**total** | **int** | Total size of result set | [optional] 
-**system_protocol_list** | [**\Evva\AirKey\Model\SystemProtocol[]**](SystemProtocol.md) | List of system protocols | [optional] 
+**from** | **string** | Timestamp from when the protocol is requested | [optional] [readonly]
+**to** | **string** | Timestamp until when the protocol is requested | [optional] [readonly]
+**offset** | **int** | Offset for paging | [optional] [readonly]
+**total** | **int** | Total size of result set | [optional] [readonly]
+**systemProtocolList** | [**\Evva\AirKey\Model\SystemProtocol[]**](SystemProtocol.md) | List of system protocols | [optional] [readonly]
 
-[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

@@ -1,17 +1,16 @@
 # Phone
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**medium_type** | **string** | Phone type of the medium | [optional] 
-**app_type** | **string** | Type of the used app | [optional] 
-**platform_version** | **string** | Current version of the platform | [optional] 
-**phone_settings** | [**\Evva\AirKey\Model\PhoneSettings**](PhoneSettings.md) | Settings of the phone | 
-**pairing_code** | **string** | Generated pairing code | [optional] 
-**pairing_code_valid_until** | **string** | Timestamp until when the pairing code is valid (ISO 8601-format compliant date with time in UTC, milliseconds precision: yyyy-mm-ddThh:mm:ss.SSSZ) | [optional] 
-**phone_number** | **string** | Phone number of the phone starting with &#39;+&#39; followed by 1-49 digits (incl. possible spaces), e.g. +436641234567 | 
-**sent_key_on** | **string** | Timestamp when the pairing code was sent to the phone (ISO 8601-format compliant date with time in UTC, milliseconds precision: yyyy-mm-ddThh:mm:ss.SSSZ) | [optional] 
+**mediumType** | **string** | Phone type of the medium | [optional] [readonly]
+**appType** | **string** | Type of the used app | [optional] [readonly]
+**platformVersion** | **string** | Current version of the platform | [optional] [readonly]
+**phoneSettings** | [**\Evva\AirKey\Model\PhoneSettings**](PhoneSettings.md) |  |
+**pairingCode** | **string** | Generated pairing code | [optional] [readonly]
+**pairingCodeValidUntil** | **string** | Timestamp until when the pairing code is valid (ISO 8601-format compliant date with time in UTC, milliseconds precision: yyyy-mm-ddThh:mm:ss.SSSZ) | [optional] [readonly]
+**phoneNumber** | **string** | Phone number of the phone starting with &#39;+&#39; followed by 1-49 digits (incl. possible spaces), e.g. +436641234567 |
+**sentKeyOn** | **string** | Timestamp when the pairing code was sent to the phone (ISO 8601-format compliant date with time in UTC, milliseconds precision: yyyy-mm-ddThh:mm:ss.SSSZ) | [optional] [readonly]
 
-[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
