@@ -107,8 +107,20 @@ jobs:
           git commit -m "feat: Auto-update AirKey API client to $SWAGGER_VERSION"
           git push origin "$BRANCH_NAME"
           
+          ASSIGNEES=$(jq -r '.prAssignees // [] | join(",")' .generator/openapi-config.json)
+          REVIEWERS=$(jq -r '.prReviewers // [] | join(",")' .generator/openapi-config.json)
+          
+          PR_FLAGS=()
+          if [ -n "$ASSIGNEES" ]; then
+            PR_FLAGS+=(--assignee "$ASSIGNEES")
+          fi
+          if [ -n "$REVIEWERS" ]; then
+            PR_FLAGS+=(--reviewer "$REVIEWERS")
+          fi
+          
           gh pr create \
             --title "feat: Update AirKey API Client to $SWAGGER_VERSION" \
             --body "Automated client update from EVVA AirKey specification. Please review the diff before merging. Merging this PR into \`main\` will automatically trigger the release tag creation." \
             --base main \
-            --head "$BRANCH_NAME"
+            --head "$BRANCH_NAME" \
+            "${PR_FLAGS[@]}"
