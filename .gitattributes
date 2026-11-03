@@ -9,8 +9,6 @@
 # Strips development, generator, and CI files from Composer distribution archives
 /.generator export-ignore
 /.github export-ignore
-/.travis.yml export-ignore
-/.swagger-codegen-ignore export-ignore
 /.openapi-generator-ignore export-ignore
 /.php_cs export-ignore
 /phpunit.xml.dist export-ignore
