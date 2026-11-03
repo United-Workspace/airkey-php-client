@@ -40,12 +40,11 @@ jobs:
 
       - name: Generate SDK with OpenAPI Generator
         run: |
-          GEN_VERSION=$(jq -r '.generatorVersion // "v7.4.0"' .generator/openapi-config.json)
+          GEN_VERSION=$(jq -r '.generatorVersion // "latest"' .generator/openapi-config.json)
           echo "Running openapitools/openapi-generator-cli:${GEN_VERSION}..."
           
           mkdir -p .generator/generated-client
           
-          # Use --hide-generation-timestamp so diffs only reflect actual API changes
           docker run --rm \
             -u $(id -u):$(id -g) \
             -v ${{ github.workspace }}:/local \
@@ -53,8 +52,7 @@ jobs:
             -i /local/.generator/swagger.json \
             -g php \
             -c /local/.generator/openapi-config.json \
-            -o /local/.generator/generated-client \
-            --hide-generation-timestamp
+            -o /local/.generator/generated-client
             
           echo "Extracting generated source files..."
           mkdir -p lib docs test

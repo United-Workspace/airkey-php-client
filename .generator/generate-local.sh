@@ -17,7 +17,7 @@ fi
 
 CONFIG_FILE=".generator/openapi-config.json"
 SWAGGER_URL=$(jq -r '.swaggerUrl' "$CONFIG_FILE")
-GEN_VERSION=$(jq -r '.generatorVersion // "v7.4.0"' "$CONFIG_FILE")
+GEN_VERSION=$(jq -r '.generatorVersion // "latest"' "$CONFIG_FILE")
 
 echo "Swagger URL: $SWAGGER_URL"
 echo "Generator Version: $GEN_VERSION"
@@ -56,16 +56,14 @@ if docker info >/dev/null 2>&1; then
         -i /local/.generator/swagger.json \
         -g php \
         -c /local/.generator/openapi-config.json \
-        -o /local/.generator/generated-client \
-        --hide-generation-timestamp
+        -o /local/.generator/generated-client
 elif command -v npx &> /dev/null; then
-    echo "Docker daemon not running. Falling back to npx @openapitools/openapi-generator-cli..."
-    npx @openapitools/openapi-generator-cli generate \
+    echo "Docker daemon not running. Falling back to npx @openapitools/openapi-generator-cli@latest..."
+    npx @openapitools/openapi-generator-cli@latest generate \
         -i .generator/swagger.json \
         -g php \
         -c .generator/openapi-config.json \
-        -o .generator/generated-client \
-        --hide-generation-timestamp
+        -o .generator/generated-client
 else
     echo "Error: Neither Docker nor npx is available to run openapi-generator."
     echo "Please run the generator in CI via GitHub Actions or start Docker locally."
