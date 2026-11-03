@@ -2,8 +2,8 @@ name: Generate AirKey Client
 on:
   workflow_dispatch:
   schedule:
-    # Run every Monday at 06:00 UTC to check for upstream API updates
-    - cron: '0 6 * * 1'
+    # Run every Tuesday at 09:00 UTC to check for upstream API updates
+    - cron: '0 9 * * 2'
 
 permissions:
   contents: write
