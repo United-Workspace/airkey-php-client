@@ -1,0 +1,5 @@
+# OpenAPI Generator Ignore
+# Protect custom serializer from being overwritten during code generation
+lib/ObjectSerializer.php
+composer.json
+README.md

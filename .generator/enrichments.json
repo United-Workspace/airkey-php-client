@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "description": "Declarative API specification enrichments for EVVA AirKey",
+  "enumAdditions": {
+    "LockProtocolEntry": {
+      "eventCategory": [
+        "SYNC_AFTER_UNLOCK_EVENT"
+      ]
+    },
+    "LockProtocolEvent": {
+      "type": [
+        "CYLINDER_SYNCHRONIZATION_VIA_OTA_AFTER_UNLOCK_PARTIAL"
+      ]
+    }
+  },
+  "discriminatorMappings": {
+    "AuthorizationInfo": {
+      "property": "type",
+      "mapping": {
+        "ONE_DAY": "OneDayAuthorizationInfo",
+        "PERIODICAL": "PeriodicalAuthorizationInfo",
+        "PERMANENT": "PermanentAuthorizationInfo",
+        "SIMPLE": "SimpleAuthorizationInfo"
+      }
+    },
+    "EventDetails": {
+      "property": "type",
+      "mapping": {
+        "UNLOCKING": "UnlockingEventDetails",
+        "APP_PAIRED": "AppPairedEventDetails",
+        "AUTHORIZATION_SYNCHRONIZED": "AuthorizationSynchronizedEventDetails"
+      }
+    },
+    "Medium": {
+      "property": "mediumType",
+      "mapping": {
+        "CARD": "Card",
+        "PHONE": "Phone"
+      }
+    }
+  }
+}

@@ -10,56 +10,86 @@ echo "========================================"
 # Make sure we're in the repository root
 cd "$(dirname "$0")/.."
 
-echo "Reading configuration..."
 if ! command -v jq &> /dev/null; then
     echo "Error: jq is not installed. Please install jq to continue."
     exit 1
 fi
 
-CLIENT_LANGUAGE=$(jq -r '.clientLanguage' .generator/swagger-config.json)
-SWAGGER_URL=$(jq -r '.apiPayload.swaggerUrl' .generator/swagger-config.json)
+CONFIG_FILE=".generator/openapi-config.json"
+SWAGGER_URL=$(jq -r '.swaggerUrl' "$CONFIG_FILE")
+GEN_VERSION=$(jq -r '.generatorVersion // "v7.4.0"' "$CONFIG_FILE")
 
-echo "Target Language: $CLIENT_LANGUAGE"
 echo "Swagger URL: $SWAGGER_URL"
+echo "Generator Version: $GEN_VERSION"
 echo ""
 
-# 1. Trigger API
-echo "Requesting code generation from generator.swagger.io..."
-RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" \
-  -d "$(jq '.apiPayload' .generator/swagger-config.json)" \
-  "https://generator.swagger.io/api/gen/clients/${CLIENT_LANGUAGE}")
+# 1. Download upstream spec
+echo "Downloading swagger specification..."
+curl -s "$SWAGGER_URL" -o .generator/swagger.json
 
-DOWNLOAD_URL=$(echo "$RESPONSE" | jq -r '.link')
+# 2. Enrich spec
+echo "Applying spec enrichments..."
+if command -v php &> /dev/null; then
+    php .generator/scripts/enrich-spec.php \
+        --spec=.generator/swagger.json \
+        --enrichments=.generator/enrichments.json \
+        --output=.generator/swagger.json
+elif command -v node &> /dev/null; then
+    node .generator/scripts/enrich-spec.js \
+        --spec=.generator/swagger.json \
+        --enrichments=.generator/enrichments.json \
+        --output=.generator/swagger.json
+else
+    echo "Warning: Neither php nor node found. Skipping spec enrichment."
+fi
 
-if [ "$DOWNLOAD_URL" == "null" ] || [ -z "$DOWNLOAD_URL" ]; then
-    echo "Error: Failed to generate client. API Response:"
-    echo "$RESPONSE"
+# 3. Run Generator
+echo "Running OpenAPI Generator..."
+mkdir -p .generator/generated-client
+
+if docker info >/dev/null 2>&1; then
+    echo "Using Docker (openapitools/openapi-generator-cli:${GEN_VERSION})..."
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$PWD:/local" \
+        "openapitools/openapi-generator-cli:${GEN_VERSION}" generate \
+        -i /local/.generator/swagger.json \
+        -g php \
+        -c /local/.generator/openapi-config.json \
+        -o /local/.generator/generated-client \
+        --hide-generation-timestamp
+elif command -v npx &> /dev/null; then
+    echo "Docker daemon not running. Falling back to npx @openapitools/openapi-generator-cli..."
+    npx @openapitools/openapi-generator-cli generate \
+        -i .generator/swagger.json \
+        -g php \
+        -c .generator/openapi-config.json \
+        -o .generator/generated-client \
+        --hide-generation-timestamp
+else
+    echo "Error: Neither Docker nor npx is available to run openapi-generator."
+    echo "Please run the generator in CI via GitHub Actions or start Docker locally."
     exit 1
 fi
 
-# 2. Download and extract
-echo "Downloading generated client wrapper..."
-curl -s -o .generator/generated-client.zip "$DOWNLOAD_URL"
-
-echo "Extracting payload into repository root..."
-unzip -q -o .generator/generated-client.zip -d .
-rm .generator/generated-client.zip
-
-echo "Moving generated source files to repository root..."
+# 4. Extract generated files
+echo "Extracting generated source files..."
 mkdir -p lib docs test
-cp -R php-client/lib/. lib/ || true
-cp -R php-client/docs/. docs/ || true
-cp -R php-client/test/. test/ || true
-cp php-client/README.md API_README.md || true
-rm -rf php-client generated-client.zip
+cp -R .generator/generated-client/lib/. lib/ || true
+cp -R .generator/generated-client/docs/. docs/ || true
+cp -R .generator/generated-client/test/. test/ || true
+cp .generator/generated-client/README.md API_README.md || true
+rm -rf .generator/generated-client
 
-# 3. Download swagger spec
-echo "Downloading swagger specification for reference..."
-curl -s "$SWAGGER_URL" -o .generator/swagger.json
+# 5. Restore protected files
+git checkout HEAD -- lib/ObjectSerializer.php 2>/dev/null || true
+
 SWAGGER_VERSION=$(jq -r '.info.version' .generator/swagger.json | tr -d '[:space:]')
 echo "Detected Swagger Version: $SWAGGER_VERSION"
-
 echo "========================================"
-echo "✅ Generation complete."
-echo "You can now review the git diff to see the expected output."
+if [ -z "$(git status --porcelain)" ]; then
+    echo "✅ Generation complete. No changes detected — SDK is already up to date."
+else
+    echo "✅ Generation complete. Changes detected in working tree; review git diff."
+fi
 echo "========================================"

@@ -1,0 +1,10 @@
+{
+  "swaggerUrl": "https://integration.api.airkey.evva.com/docs/swagger.json",
+  "generatorVersion": "v7.4.0",
+  "invokerPackage": "Evva\\AirKey",
+  "apiPackage": "Api",
+  "modelPackage": "Model",
+  "packageName": "evva-airkey-api",
+  "srcBasePath": "lib",
+  "variableNamingConvention": "camelCase"
+}

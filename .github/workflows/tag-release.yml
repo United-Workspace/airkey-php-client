@@ -19,9 +19,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          SWAGGER_URL=$(jq -r '.apiPayload.swaggerUrl' .generator/swagger-config.json)
-          curl -s "$SWAGGER_URL" -o .generator/swagger.json
-          SWAGGER_VERSION=$(jq -r '.info.version' .generator/swagger.json | tr -d '[:space:]')
+          if [ -f .generator/swagger.json ]; then
+            SWAGGER_VERSION=$(jq -r '.info.version' .generator/swagger.json | tr -d '[:space:]')
+          else
+            SWAGGER_URL=$(jq -r '.swaggerUrl // .apiPayload.swaggerUrl' .generator/openapi-config.json)
+            curl -s "$SWAGGER_URL" -o .generator/swagger.json
+            SWAGGER_VERSION=$(jq -r '.info.version' .generator/swagger.json | tr -d '[:space:]')
+          fi
+          
           echo "Version from spec: $SWAGGER_VERSION"
           if [ -z "$SWAGGER_VERSION" ] || [ "$SWAGGER_VERSION" == "null" ]; then
             echo "No version found in .generator/swagger.json"

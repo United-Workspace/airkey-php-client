@@ -1,6 +1,9 @@
 name: Generate AirKey Client
 on:
   workflow_dispatch:
+  schedule:
+    # Run every Monday at 06:00 UTC to check for upstream API updates
+    - cron: '0 6 * * 1'
 
 permissions:
   contents: write
@@ -10,42 +13,104 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y jq unzip
-      
-      - name: Generate Client
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, json, mbstring
+          tools: composer
+
+      - name: Fetch & Enrich API Specification
         run: |
-          CLIENT_LANGUAGE=$(jq -r '.clientLanguage' .generator/swagger-config.json)
-          RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" \
-            -d "$(jq '.apiPayload' .generator/swagger-config.json)" \
-            "https://generator.swagger.io/api/gen/clients/${CLIENT_LANGUAGE}")
-          DOWNLOAD_URL=$(echo $RESPONSE | jq -r '.link')
-          curl -s -o generated-client.zip "$DOWNLOAD_URL"
-          unzip -q -o generated-client.zip -d .
-          mkdir -p lib docs test
-          cp -R php-client/lib/. lib/ || true
-          cp -R php-client/docs/. docs/ || true
-          cp -R php-client/test/. test/ || true
-          cp php-client/README.md API_README.md || true
-          rm -rf php-client generated-client.zip
+          SWAGGER_URL=$(jq -r '.swaggerUrl' .generator/openapi-config.json)
+          echo "Fetching spec from $SWAGGER_URL..."
+          curl -s "$SWAGGER_URL" -o .generator/swagger.json
           
-      - name: Create Pull Request
+          echo "Applying enrichments..."
+          php .generator/scripts/enrich-spec.php \
+            --spec=.generator/swagger.json \
+            --enrichments=.generator/enrichments.json \
+            --output=.generator/swagger.json
+
+      - name: Generate SDK with OpenAPI Generator
+        run: |
+          GEN_VERSION=$(jq -r '.generatorVersion // "v7.4.0"' .generator/openapi-config.json)
+          echo "Running openapitools/openapi-generator-cli:${GEN_VERSION}..."
+          
+          mkdir -p .generator/generated-client
+          
+          # Use --hide-generation-timestamp so diffs only reflect actual API changes
+          docker run --rm \
+            -u $(id -u):$(id -g) \
+            -v ${{ github.workspace }}:/local \
+            openapitools/openapi-generator-cli:${GEN_VERSION} generate \
+            -i /local/.generator/swagger.json \
+            -g php \
+            -c /local/.generator/openapi-config.json \
+            -o /local/.generator/generated-client \
+            --hide-generation-timestamp
+            
+          echo "Extracting generated source files..."
+          mkdir -p lib docs test
+          cp -R .generator/generated-client/lib/. lib/ || true
+          cp -R .generator/generated-client/docs/. docs/ || true
+          cp -R .generator/generated-client/test/. test/ || true
+          cp .generator/generated-client/README.md API_README.md || true
+          rm -rf .generator/generated-client
+
+      - name: Restore Protected Files
+        run: |
+          # Keep custom serializer discriminator logic safe if present
+          git checkout HEAD -- lib/ObjectSerializer.php || true
+
+      - name: Validate Composer Package
+        run: |
+          composer validate --strict
+
+      - name: Check for Changes & Create Pull Request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          SWAGGER_URL=$(jq -r '.apiPayload.swaggerUrl' .generator/swagger-config.json)
-          curl -s "$SWAGGER_URL" -o .generator/swagger.json
+          # 1. Check if git working directory has any changes
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "✅ No changes detected after generation. SDK is completely up-to-date."
+            exit 0
+          fi
+          
+          echo "Changes detected in generated code or specification."
           SWAGGER_VERSION=$(jq -r '.info.version' .generator/swagger.json | tr -d '[:space:]')
-          BRANCH_NAME="update-client-${SWAGGER_VERSION}-${{ github.run_id }}"
+          BRANCH_NAME="update-client-${SWAGGER_VERSION}"
+          
+          # 2. Check if a PR for this version is already open
+          EXISTING_PR=$(gh pr list --state open --head "$BRANCH_NAME" --json number -q '.[0].number' || true)
+          if [ -n "$EXISTING_PR" ]; then
+            echo "ℹ️ Pull request #${EXISTING_PR} for version ${SWAGGER_VERSION} already exists. Pushing latest changes to branch."
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git checkout -B "$BRANCH_NAME"
+            git add .
+            git commit -m "chore: Refresh generated client for AirKey $SWAGGER_VERSION"
+            git push origin "$BRANCH_NAME" --force
+            exit 0
+          fi
+          
+          # 3. Create new branch and open Pull Request
+          echo "Opening new Pull Request for version ${SWAGGER_VERSION}..."
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b $BRANCH_NAME
+          git checkout -b "$BRANCH_NAME"
           git add .
           git commit -m "feat: Auto-update AirKey API client to $SWAGGER_VERSION"
-          git push origin $BRANCH_NAME
-          gh pr create --title "feat: Update AirKey API Client to $SWAGGER_VERSION" --body "Automated update from Swagger specification." --base main --head $BRANCH_NAME
+          git push origin "$BRANCH_NAME"
+          
+          gh pr create \
+            --title "feat: Update AirKey API Client to $SWAGGER_VERSION" \
+            --body "Automated client update from EVVA AirKey specification. Please review the diff before merging. Merging this PR into \`main\` will automatically trigger the release tag creation." \
+            --base main \
+            --head "$BRANCH_NAME"
