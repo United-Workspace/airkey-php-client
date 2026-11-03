@@ -131,12 +131,23 @@ if (!empty($enrichments['discriminatorMappings']) && is_array($enrichments['disc
         $propName = $mappingConfig['property'] ?? 'type';
         $mapping = $mappingConfig['mapping'] ?? [];
 
-        // Build OpenAPI discriminator object
-        $mappingDict = [];
-        foreach ($mapping as $discriminatorValue => $childModelName) {
-            $mappingDict[$discriminatorValue] = $schemaPrefix . $childModelName;
+        // In Swagger 2.0, discriminator MUST be a string (the property name).
+        // In OpenAPI 3.0, discriminator is an object with propertyName and mapping.
+        if ($isSwagger2) {
+            $parentSchema['discriminator'] = $propName;
+        } else {
+            $mappingDict = [];
+            foreach ($mapping as $discriminatorValue => $childModelName) {
+                $mappingDict[$discriminatorValue] = $schemaPrefix . $childModelName;
+            }
+            $parentSchema['discriminator'] = [
+                'propertyName' => $propName,
+                'mapping' => $mappingDict,
+            ];
+        }
 
-            // Also attach vendor extension to child model for OpenAPI Generator
+        // Attach vendor extensions to child models
+        foreach ($mapping as $discriminatorValue => $childModelName) {
             $childSchema = &getSchemaRef($spec, $isSwagger2, $childModelName);
             if ($childSchema !== null) {
                 $childSchema['x-discriminator-value'] = $discriminatorValue;
@@ -146,12 +157,7 @@ if (!empty($enrichments['discriminatorMappings']) && is_array($enrichments['disc
             }
         }
 
-        $parentSchema['discriminator'] = [
-            'propertyName' => $propName,
-            'mapping' => $mappingDict,
-        ];
-
-        echo "[APPLIED] Configured discriminator mapping for parent model '{$parentModel}' (property: '{$propName}', " . count($mapping) . " mapped subclasses).\n";
+        echo "[APPLIED] Configured discriminator for parent model '{$parentModel}' (property: '{$propName}', " . count($mapping) . " mapped subclasses).\n";
     }
 }
 

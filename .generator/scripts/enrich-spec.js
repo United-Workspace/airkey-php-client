@@ -83,11 +83,21 @@ if (enrichments.discriminatorMappings) {
 
     const propName = mappingConfig.property || 'type';
     const mapping = mappingConfig.mapping || {};
-    const mappingDict = {};
+
+    if (isSwagger2) {
+      parentSchema.discriminator = propName;
+    } else {
+      const mappingDict = {};
+      for (const [discVal, childModelName] of Object.entries(mapping)) {
+        mappingDict[discVal] = `${schemaPrefix}${childModelName}`;
+      }
+      parentSchema.discriminator = {
+        propertyName: propName,
+        mapping: mappingDict,
+      };
+    }
 
     for (const [discVal, childModelName] of Object.entries(mapping)) {
-      mappingDict[discVal] = `${schemaPrefix}${childModelName}`;
-
       const childSchema = getSchema(childModelName);
       if (childSchema) {
         childSchema['x-discriminator-value'] = discVal;
@@ -97,12 +107,7 @@ if (enrichments.discriminatorMappings) {
       }
     }
 
-    parentSchema.discriminator = {
-      propertyName: propName,
-      mapping: mappingDict,
-    };
-
-    console.log(`[APPLIED] Configured discriminator mapping for parent model '${parentModel}' (property: '${propName}', ${Object.keys(mapping).length} mapped subclasses).`);
+    console.log(`[APPLIED] Configured discriminator for parent model '${parentModel}' (property: '${propName}', ${Object.keys(mapping).length} mapped subclasses).`);
   }
 }
 
