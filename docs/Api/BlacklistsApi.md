@@ -1,28 +1,36 @@
 # Evva\AirKey\BlacklistsApi
 
-All URIs are relative to *https://integration.api.airkey.evva.com:443/cloud*
-
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**getBlacklists**](BlacklistsApi.md#getBlacklists) | **GET** /v1/blacklists | Gets all available blacklist entries.
 
 
-# **getBlacklists**
-> \Evva\AirKey\Model\BlacklistEntry[] getBlacklists($lock_id, $medium_id)
+All URIs are relative to https://integration.api.airkey.evva.com:443/cloud, except if the operation defines another base path.
+
+| Method | HTTP request | Description |
+| ------------- | ------------- | ------------- |
+| [**getBlacklists()**](BlacklistsApi.md#getBlacklists) | **GET** /v1/blacklists | Gets all available blacklist entries. |
+
+
+## `getBlacklists()`
+
+```php
+getBlacklists($lockId, $mediumId): \Evva\AirKey\Model\BlacklistEntry[]
+```
 
 Gets all available blacklist entries.
 
 Returns a list of all available blacklist entries defined in the access control system, sorted by lock id and medium id in ascending order.
 
 ### Example
+
 ```php
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
+
 
 // Configure API key authorization: X-API-Key
 $config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 // $config = Evva\AirKey\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
 
 $apiInstance = new Evva\AirKey\Api\BlacklistsApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
@@ -30,24 +38,23 @@ $apiInstance = new Evva\AirKey\Api\BlacklistsApi(
     new GuzzleHttp\Client(),
     $config
 );
-$lock_id = 789; // int | Filter blacklist entries by lock id
-$medium_id = 789; // int | Filter blacklist entries by medium id
+$lockId = 56; // int | Filter blacklist entries by lock id
+$mediumId = 56; // int | Filter blacklist entries by medium id
 
 try {
-    $result = $apiInstance->getBlacklists($lock_id, $medium_id);
+    $result = $apiInstance->getBlacklists($lockId, $mediumId);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling BlacklistsApi->getBlacklists: ', $e->getMessage(), PHP_EOL;
 }
-?>
 ```
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **lock_id** | **int**| Filter blacklist entries by lock id | [optional]
- **medium_id** | **int**| Filter blacklist entries by medium id | [optional]
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **lockId** | **int**| Filter blacklist entries by lock id | [optional] |
+| **mediumId** | **int**| Filter blacklist entries by medium id | [optional] |
 
 ### Return type
 
@@ -59,8 +66,9 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
 
-[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
-
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)

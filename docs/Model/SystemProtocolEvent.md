@@ -1,11 +1,10 @@
 # SystemProtocolEvent
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **string** | Type of event | [optional] 
-**translations** | **map[string,string]** | Event type translations comprising all requested languages (default only \&quot;de-DE\&quot;) | [optional] 
+**type** | **string** | Type of event | [optional] [readonly]
+**translations** | **array<string,string>** | Event type translations comprising all requested languages (default only \&quot;de-DE\&quot;) | [optional] [readonly]
 
-[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

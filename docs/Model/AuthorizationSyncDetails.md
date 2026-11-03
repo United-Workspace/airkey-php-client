@@ -1,11 +1,10 @@
 # AuthorizationSyncDetails
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**authorization_id** | **int** | Unique authorization identifier | [optional] 
-**sync_action** | **string** | Type of sync action | [optional] 
+**authorizationId** | **int** | Unique authorization identifier | [optional] [readonly]
+**syncAction** | **string** | Type of sync action | [optional] [readonly]
 
-[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

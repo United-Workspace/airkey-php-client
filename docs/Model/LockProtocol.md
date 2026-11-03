@@ -1,11 +1,10 @@
 # LockProtocol
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**lock** | [**\Evva\AirKey\Model\SimpleLock**](SimpleLock.md) | Lock with which this protocol entry is associated | [optional] 
-**lock_protocol** | [**\Evva\AirKey\Model\LockProtocolEntry**](LockProtocolEntry.md) | Protocol entry of a lock | [optional] 
+**lock** | [**\Evva\AirKey\Model\SimpleLock**](SimpleLock.md) |  | [optional]
+**lockProtocol** | [**\Evva\AirKey\Model\LockProtocolEntry**](LockProtocolEntry.md) |  | [optional]
 
-[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
