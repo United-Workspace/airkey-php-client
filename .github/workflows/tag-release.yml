@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '.generator/swagger.json'
+  workflow_dispatch:
 
 permissions:
   contents: write
